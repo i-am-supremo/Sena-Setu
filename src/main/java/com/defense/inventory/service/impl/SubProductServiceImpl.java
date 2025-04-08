@@ -31,7 +31,11 @@ public class SubProductServiceImpl implements SubProductService {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
         SubProduct subProduct = modelMapper.map(subProductRequestDto, SubProduct.class);
         subProduct.setProduct(product);
-        subProduct.setBarcode(this.generateRandomBarcode());
+        String barcode;
+        do {
+            barcode = this.generateRandomBarcode();
+        } while (subProductRepository.existsByBarcode(barcode));
+        subProduct.setBarcode(barcode);
         subProduct.setQuantity(0);
         log.info("Saving subProduct ");
         return modelMapper.map(subProductRepository.save(subProduct), SubProductResponseDto.class);

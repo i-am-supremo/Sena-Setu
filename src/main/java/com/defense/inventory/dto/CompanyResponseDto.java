@@ -12,6 +12,5 @@ public class CompanyResponseDto {
     private Long id;
     private String name;
     private String description;
-    private Unit unit;
     private List<Product> productList;
 }

@@ -9,8 +9,6 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    UserResponseDto registerUser(UserRequestDto userRequestDto);
-
     UserResponseDto createAdminUser(String name);
 
     UserResponseDto getUserById(Long userId);

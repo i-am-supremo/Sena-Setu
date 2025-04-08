@@ -11,4 +11,5 @@ import java.util.List;
 public interface SubProductRepository extends JpaRepository<SubProduct, Long> {
 
     List<SubProduct> findByNameContainingIgnoreCase(String name);
+    boolean existsByBarcode(String barcode);
 }

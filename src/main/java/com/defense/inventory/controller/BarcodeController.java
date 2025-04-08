@@ -2,6 +2,7 @@ package com.defense.inventory.controller;
 
 import com.defense.inventory.service.BarcodeService;
 import com.google.zxing.WriterException;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -19,11 +20,15 @@ public class BarcodeController {
 
     private final BarcodeService barcodeService;
 
-    @GetMapping("/{text}")
-    public ResponseEntity<byte[]> generateBarcode(@PathVariable String text) throws IOException, WriterException {
-        log.info("Generating barcode for text: {}", text);
+    @Operation(
+            summary = "Barcode Image Generator From the Barcode String",
+            description = "This will return a Byte Array of Data having PNG image of the Barcode"
+    )
+    @GetMapping("/{barcodeString}")
+    public ResponseEntity<byte[]> generateBarcode(@PathVariable String barcodeString) throws IOException, WriterException {
+        log.info("Generating barcode for text: {}", barcodeString);
 
-        byte[] barcodeImage = barcodeService.generateBarcodeImage(text);
+        byte[] barcodeImage = barcodeService.generateBarcodeImage(barcodeString);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "image/png");

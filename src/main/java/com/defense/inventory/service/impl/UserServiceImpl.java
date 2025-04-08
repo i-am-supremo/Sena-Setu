@@ -28,18 +28,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final ModelMapper modelMapper;
 
     @Override
-    public UserResponseDto registerUser(UserRequestDto userRequestDto) {
-        log.info("Registering New User...");
-        User user = modelMapper.map(userRequestDto, User.class);
-        User alreadyExist = userRepository.findByName(user.getName());
-        if (alreadyExist != null)
-            throw new ResourceAlreadyExistException("User already ", "Name ", user.getName());
-        user.setRole(Role.USER);
-        log.info("Saving user ...");
-        return modelMapper.map(userRepository.save(user), UserResponseDto.class);
-    }
-
-    @Override
     public UserResponseDto createAdminUser(String name) {
         User user = userRepository.findByName(name);
         if (user == null)
