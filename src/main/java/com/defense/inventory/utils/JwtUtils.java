@@ -26,7 +26,7 @@ public class JwtUtils {
                 .claim("role", user.getRole().name())
                 .claim("name", user.getName())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() * 1000 * 60 * 60))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSecretkey())
                 .compact();
     }
@@ -38,5 +38,14 @@ public class JwtUtils {
                 .parseSignedClaims(token)
                 .getPayload();
         return Long.valueOf(claims.getSubject());
+    }
+
+    public String getRoleFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSecretkey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("role", String.class);
     }
 }
