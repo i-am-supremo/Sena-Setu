@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @Operation(
-            summary = "Update User to Admin",
+            summary = "Update User to Admin, ADMIN Access Only",
             description = "Updates the User to Admin"
     )
     @PostMapping("/admin/{name}")
@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Delete the Detail of User",
+            summary = "Delete the Detail of User, ADMIN Access Only",
             description = "Delete user details"
     )
     @DeleteMapping("/{id}")

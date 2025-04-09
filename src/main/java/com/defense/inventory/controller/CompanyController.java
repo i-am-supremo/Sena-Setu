@@ -21,7 +21,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @Operation(
-            summary = "Create a New Company",
+            summary = "Create a New Company, ADMIN Access Only",
             description = "This will Create a new company in the DB"
     )
     @PostMapping("/unit/{unitId}")
@@ -51,7 +51,7 @@ public class CompanyController {
     }
 
     @Operation(
-            summary = "Updates the Details of the existing company",
+            summary = "Updates the Details of the existing company, ADMIN Access Only",
             description = "This will update the detail of existing company"
     )
     @PutMapping("/{id}/unit/{unitId}")
@@ -61,7 +61,7 @@ public class CompanyController {
     }
 
     @Operation(
-            summary = "Delete the Details of the existing company",
+            summary = "Delete the Details of the existing company, ADMIN Access Only",
             description = "This will delete existing company"
     )
     @DeleteMapping("/{id}")

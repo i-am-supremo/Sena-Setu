@@ -21,7 +21,7 @@ public class UnitController {
     private final UnitService unitService;
 
     @Operation(
-            summary = "Creates a new Unit in the DB",
+            summary = "Creates a new Unit in the DB, ADMIN Access Only",
             description = "Adds a new unit in the DB"
     )
     @PostMapping
@@ -51,7 +51,7 @@ public class UnitController {
     }
 
     @Operation(
-            summary = "Update Unit Details",
+            summary = "Update Unit Details, ADMIN Access Only",
             description = "Update the unit details"
     )
     @PutMapping("/{id}")
@@ -61,7 +61,7 @@ public class UnitController {
     }
 
     @Operation(
-            summary = "Delete Unit by id",
+            summary = "Delete Unit by id, ADMIN Access Only",
             description = "Delete unit details by id"
     )
     @DeleteMapping("/{id}")
