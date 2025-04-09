@@ -1,7 +1,6 @@
 package com.defense.inventory.config;
 
 import com.defense.inventory.entity.User;
-import com.defense.inventory.service.UserService;
 import com.defense.inventory.service.impl.UserServiceImpl;
 import com.defense.inventory.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
