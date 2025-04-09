@@ -20,12 +20,21 @@ public class GlobalExceptionHandler {
         ExceptionDto exceptionDto = new ExceptionDto(message, false);
         return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidRoleException.class)
+    public ResponseEntity<ExceptionDto> invalidRoleException(InvalidRoleException ex) {
+        String message = ex.getMessage();
+        ExceptionDto exceptionDto = new ExceptionDto(message, false);
+        return new ResponseEntity<>(exceptionDto, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(ResourceAlreadyExistException.class)
     public ResponseEntity<ExceptionDto> resourceFoundHandler(ResourceAlreadyExistException ex) {
         String message = ex.getMessage();
         ExceptionDto exceptionDto = new ExceptionDto(message, false);
         return new ResponseEntity<>(exceptionDto, HttpStatus.FOUND);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionDto> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
