@@ -2,10 +2,7 @@ package com.defense.inventory.service;
 
 import com.defense.inventory.dto.SubProductRequestDto;
 import com.defense.inventory.dto.SubProductResponseDto;
-import com.defense.inventory.entity.SubProduct;
-import com.google.zxing.WriterException;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface SubProductService {

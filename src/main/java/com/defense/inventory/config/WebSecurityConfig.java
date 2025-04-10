@@ -21,7 +21,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -40,14 +39,14 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/users/delete/{id}","/users/admin/{name}","/units/create"
-                        ,"/units/update/{id}","/units/delete/{id}","/companies/create/unit/{unitId}","/companies/update/{id}/unit/{unitId}"
-                                ,"/companies/delete/{id}").hasRole("ADMIN")
+                        .requestMatchers("/users/delete/{id}", "/users/admin/{name}", "/units/create"
+                                , "/units/update/{id}", "/units/delete/{id}", "/companies/create/unit/{unitId}", "/companies/update/{id}/unit/{unitId}"
+                                , "/companies/delete/{id}").hasRole("ADMIN")
                         .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
-                        .accessDeniedHandler(accessDeniedHandler()) // 🔥 Registering your handler here
+                        .accessDeniedHandler(accessDeniedHandler())
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -66,6 +65,7 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return (HttpServletRequest request, HttpServletResponse response, org.springframework.security.access.AccessDeniedException ex) -> {

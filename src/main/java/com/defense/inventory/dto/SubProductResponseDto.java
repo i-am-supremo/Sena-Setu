@@ -1,6 +1,5 @@
 package com.defense.inventory.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data

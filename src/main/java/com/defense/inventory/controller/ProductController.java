@@ -30,6 +30,7 @@ public class ProductController {
         log.info("Creating product for company ID: {}", companyId);
         return ResponseEntity.ok(productService.createProduct(productRequestDto, companyId));
     }
+
     @Operation(
             summary = "Return a Product by Id",
             description = "Return the Product Detail by Id"
@@ -39,6 +40,7 @@ public class ProductController {
         log.info("Fetching product with ID: {}", productId);
         return ResponseEntity.ok(productService.getProductById(productId));
     }
+
     @Operation(
             summary = "Return all Products available",
             description = "Return all the product available"

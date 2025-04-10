@@ -22,11 +22,9 @@ import java.time.LocalDate;
 @Service
 public class AuthServiceImpl {
     @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
     ModelMapper modelMapper;
-
+    @Autowired
+    private UserRepository userRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
 

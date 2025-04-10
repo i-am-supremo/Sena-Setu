@@ -52,8 +52,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
         company.setName(updatedCompany.getName());
         company.setDescription(updatedCompany.getDescription());
-        if(company.getUnit().getId() != unitId)
-        {
+        if (company.getUnit().getId() != unitId) {
             Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
             company.setUnit(unit);
         }

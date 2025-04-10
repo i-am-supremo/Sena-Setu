@@ -1,6 +1,6 @@
 package com.defense.inventory.exception;
 
-public class ResourceAlreadyExistException extends RuntimeException{
+public class ResourceAlreadyExistException extends RuntimeException {
 
     String resourceName;
     String fieldName;

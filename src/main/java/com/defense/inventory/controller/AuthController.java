@@ -1,6 +1,5 @@
 package com.defense.inventory.controller;
 
-import com.defense.inventory.dto.LoginDto;
 import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.service.impl.AuthServiceImpl;
@@ -30,6 +29,7 @@ public class AuthController {
         UserResponseDto userDto = authService.signup(signupDto);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
+
     @Operation(
             summary = "Login User and returns bearer token",
             description = "After Success Login it will return Bearer token valid for one hour"
