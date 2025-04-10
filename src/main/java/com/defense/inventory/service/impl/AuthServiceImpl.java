@@ -9,7 +9,6 @@ import com.defense.inventory.exception.ResourceAlreadyExistException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.UserRepository;
 import com.defense.inventory.utils.JwtUtils;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +38,7 @@ public class AuthServiceImpl {
 
     public UserResponseDto signup(UserRequestDto signupDto) {
         User user = userRepo.findByName(signupDto.getName());
-        if (user!=null)
+        if (user != null)
             throw new ResourceAlreadyExistException("User already ", "Name ", user.getName());
 
         User userToBeSaved = modelMapper.map(signupDto, User.class);
@@ -51,8 +50,8 @@ public class AuthServiceImpl {
 
     public String login(UserRequestDto loginDto) {
         User userCheck = userRepo.findByName(loginDto.getName());
-        if(userCheck == null)
-            throw new ResourceNotFoundException("No User", "this Name "+loginDto.getName(), 404L);
+        if (userCheck == null)
+            throw new ResourceNotFoundException("No User", "this Name " + loginDto.getName(), 404L);
 
         if (!passwordEncoder.matches(loginDto.getPassword(), userCheck.getPassword())) {
             throw new InvalidCredentialsException("Password");
