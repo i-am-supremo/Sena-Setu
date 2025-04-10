@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,8 @@ public class UnitController {
             summary = "Creates a new Unit in the DB, ADMIN Access Only",
             description = "Adds a new unit in the DB"
     )
-    @PostMapping
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UnitResponseDto> createUnit(@Valid @RequestBody UnitRequestDto unitRequestDto) {
         log.info("Received request to create unit");
         return ResponseEntity.ok(unitService.createUnit(unitRequestDto));
@@ -34,7 +36,7 @@ public class UnitController {
             summary = "Return Unit by id",
             description = "Return unit details by id"
     )
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<UnitResponseDto> getUnitById(@PathVariable("id") Long unitId) {
         log.info("Fetching unit with ID: {}", unitId);
         return ResponseEntity.ok(unitService.getUnitById(unitId));
@@ -44,7 +46,7 @@ public class UnitController {
             summary = "Return All Units",
             description = "Return all unit details"
     )
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<UnitResponseDto>> getAllUnits() {
         log.info("Fetching all units");
         return ResponseEntity.ok(unitService.getAllUnits());
@@ -54,7 +56,8 @@ public class UnitController {
             summary = "Update Unit Details, ADMIN Access Only",
             description = "Update the unit details"
     )
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UnitResponseDto> updateUnit(@PathVariable("id") Long unitId, @Valid @RequestBody UnitRequestDto updatedUnit) {
         log.info("Updating unit with ID: {}", unitId);
         return ResponseEntity.ok(unitService.updateUnit(unitId, updatedUnit));
@@ -64,7 +67,8 @@ public class UnitController {
             summary = "Delete Unit by id, ADMIN Access Only",
             description = "Delete unit details by id"
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteUnit(@PathVariable("id") Long unitId) {
         log.info("Deleting unit with ID: {}", unitId);
         return ResponseEntity.ok(unitService.deleteUnit(unitId));

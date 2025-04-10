@@ -4,7 +4,6 @@ import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.entity.User;
 import com.defense.inventory.entity.enums.Role;
-import com.defense.inventory.exception.ResourceAlreadyExistException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.UserRepository;
 import com.defense.inventory.service.UserService;
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByName(username);
-        if(user == null)
+        if (user == null)
             throw new ResourceNotFoundException("No User ", "Name", 404L);
         return user;
     }
