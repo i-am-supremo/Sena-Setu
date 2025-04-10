@@ -4,7 +4,9 @@ import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.entity.User;
 import com.defense.inventory.entity.enums.Role;
+import com.defense.inventory.exception.InvalidCredentialsException;
 import com.defense.inventory.exception.ResourceAlreadyExistException;
+import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.UserRepository;
 import com.defense.inventory.utils.JwtUtils;
 import jakarta.validation.Valid;
@@ -48,6 +50,14 @@ public class AuthServiceImpl {
     }
 
     public String login(UserRequestDto loginDto) {
+        User userCheck = userRepo.findByName(loginDto.getName());
+        if(userCheck == null)
+            throw new ResourceNotFoundException("No User", "this Name "+loginDto.getName(), 404L);
+
+        if (!passwordEncoder.matches(loginDto.getPassword(), userCheck.getPassword())) {
+            throw new InvalidCredentialsException("Password");
+        }
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getName(), loginDto.getPassword()));
 
         User user = (User) authentication.getPrincipal();
