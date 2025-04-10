@@ -72,7 +72,7 @@ public class WebSecurityConfig {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json");
             response.getWriter().write(
-                    "{\"message\":\"Access Denied: You do not have permission to perform this action.\",\"status\":false}"
+                    "{\"message\":\"Access Denied: Your role does not have permission to perform this action.\",\"status\":false}"
             );
         };
     }
