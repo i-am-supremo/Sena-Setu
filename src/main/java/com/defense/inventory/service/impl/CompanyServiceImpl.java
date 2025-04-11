@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,22 +30,37 @@ public class CompanyServiceImpl implements CompanyService {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         Company company = modelMapper.map(companyRequestDto, Company.class);
         company.setUnit(unit);
-        return modelMapper.map(companyRepository.save(company), CompanyResponseDto.class);
+        Company savedCompany = companyRepository.save(company);
+        CompanyResponseDto companyResponseDto = modelMapper.map(savedCompany, CompanyResponseDto.class);
+        companyResponseDto.setUnitId(unit.getId());
+        companyResponseDto.setUnitName(unit.getName());
+        return companyResponseDto;
     }
 
     @Override
     public CompanyResponseDto getCompanyById(Long companyId) {
         log.info("Getting company details by Id");
-        return modelMapper.map(companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No company ", "id ", companyId)), CompanyResponseDto.class);
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No company ", "id ", companyId));
+        CompanyResponseDto companyResponseDto = modelMapper.map(company, CompanyResponseDto.class);
+        companyResponseDto.setUnitId(company.getUnit().getId());
+        companyResponseDto.setUnitName(company.getUnit().getName());
+        return companyResponseDto;
     }
 
     @Override
     public List<CompanyResponseDto> getAllCompanies() {
         log.info("Getting all unit details");
-        return companyRepository.findAll()
-                .stream()
-                .map(company -> modelMapper.map(company, CompanyResponseDto.class))
-                .toList();
+        List<Company> companyList = companyRepository.findAll();
+        List<CompanyResponseDto> companyResponseDtos = new ArrayList<>();
+
+        for(Company company: companyList)
+        {
+            CompanyResponseDto companyResponseDto = modelMapper.map(company, CompanyResponseDto.class);
+            companyResponseDto.setUnitId(company.getUnit().getId());
+            companyResponseDto.setUnitName(company.getUnit().getName());
+            companyResponseDtos.add(companyResponseDto);
+        }
+        return companyResponseDtos;
     }
 
     @Override
@@ -52,11 +68,16 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
         company.setName(updatedCompany.getName());
         company.setDescription(updatedCompany.getDescription());
-        if (company.getUnit().getId() != unitId) {
-            Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
-            company.setUnit(unit);
-        }
-        return modelMapper.map(companyRepository.save(company), CompanyResponseDto.class);
+
+        Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
+        company.setUnit(unit);
+
+        Company savedCompany = companyRepository.save(company);
+        CompanyResponseDto companyResponseDto = modelMapper.map(savedCompany, CompanyResponseDto.class);
+        companyResponseDto.setUnitId(unit.getId());
+        companyResponseDto.setUnitName(unit.getName());
+
+        return companyResponseDto;
     }
 
     @Override

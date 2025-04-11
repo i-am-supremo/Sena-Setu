@@ -1,5 +1,6 @@
 package com.defense.inventory.service.impl;
 
+import com.defense.inventory.dto.LoginResponseDto;
 import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.entity.User;
@@ -46,7 +47,7 @@ public class AuthServiceImpl {
         return modelMapper.map(userRepo.save(userToBeSaved), UserResponseDto.class);
     }
 
-    public String login(UserRequestDto loginDto) {
+    public LoginResponseDto login(UserRequestDto loginDto) {
         User userCheck = userRepo.findByName(loginDto.getName());
         if (userCheck == null)
             throw new ResourceNotFoundException("No User", "this Name " + loginDto.getName(), 404L);
@@ -58,6 +59,8 @@ public class AuthServiceImpl {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getName(), loginDto.getPassword()));
 
         User user = (User) authentication.getPrincipal();
-        return jwtService.generateToken(user);
+        LoginResponseDto loginResponseDto = modelMapper.map(user, LoginResponseDto.class);
+        loginResponseDto.setToken(jwtService.generateToken(user));
+        return loginResponseDto;
     }
 }

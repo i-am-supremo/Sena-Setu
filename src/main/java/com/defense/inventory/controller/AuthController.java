@@ -1,5 +1,6 @@
 package com.defense.inventory.controller;
 
+import com.defense.inventory.dto.LoginResponseDto;
 import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.service.impl.AuthServiceImpl;
@@ -35,8 +36,7 @@ public class AuthController {
             description = "After Success Login it will return Bearer token valid for one hour"
     )
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserRequestDto loginDto) {
-        String token = authService.login(loginDto);
-        return new ResponseEntity<>(token, HttpStatus.ACCEPTED);
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody UserRequestDto loginDto) {
+        return new ResponseEntity<>(authService.login(loginDto), HttpStatus.ACCEPTED);
     }
 }
