@@ -25,7 +25,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.security.PrivateKey;
 import java.util.List;
 
 @Service
@@ -33,13 +32,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BarcodeServiceImpl implements BarcodeService {
 
+    private static final int WIDTH = 300;
+    private static final int HEIGHT = 100;
     private final SubProductRepository subProductRepository;
     private final ProductRepository productRepository;
     private final CompanyRepository companyRepository;
     private final UnitRepository unitRepository;
-
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 100;
 
     @Override
     public byte[] generateBarcodeImage(String barcodeText) {

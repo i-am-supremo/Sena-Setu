@@ -15,6 +15,8 @@ import java.util.List;
 @Data
 public class Product {
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    List<SubProduct> subProductList;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +26,4 @@ public class Product {
     @JoinColumn(name = "company", nullable = false)
     @JsonIgnore
     private Company company;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    List<SubProduct> subProductList;
 }
