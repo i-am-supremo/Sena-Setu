@@ -43,10 +43,11 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Return List of all Users",
+            summary = "Return List of all Users ADMIN Access Only",
             description = "Return all user details"
     )
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         log.info("Received request to get all users");
         return ResponseEntity.ok(userService.getAllUsers());

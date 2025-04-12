@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/users/delete/{id}", "/users/admin/{name}", "/units/create"
+                        .requestMatchers("/users/delete/{id}", "/users/admin/{name}","/users/getAll", "/units/create"
                                 , "/units/update/{id}", "/units/delete/{id}", "/companies/create/unit/{unitId}", "/companies/update/{id}/unit/{unitId}"
                                 , "/companies/delete/{id}").hasRole("ADMIN")
                         .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
