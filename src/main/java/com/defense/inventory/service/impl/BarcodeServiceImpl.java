@@ -1,5 +1,15 @@
 package com.defense.inventory.service.impl;
 
+import com.defense.inventory.dto.BarcodeResponseDto;
+import com.defense.inventory.entity.Company;
+import com.defense.inventory.entity.Product;
+import com.defense.inventory.entity.SubProduct;
+import com.defense.inventory.entity.Unit;
+import com.defense.inventory.exception.ResourceNotFoundException;
+import com.defense.inventory.repository.CompanyRepository;
+import com.defense.inventory.repository.ProductRepository;
+import com.defense.inventory.repository.SubProductRepository;
+import com.defense.inventory.repository.UnitRepository;
 import com.defense.inventory.service.BarcodeService;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -15,11 +25,18 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.PrivateKey;
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class BarcodeServiceImpl implements BarcodeService {
+
+    private final SubProductRepository subProductRepository;
+    private final ProductRepository productRepository;
+    private final CompanyRepository companyRepository;
+    private final UnitRepository unitRepository;
 
     private static final int WIDTH = 300;
     private static final int HEIGHT = 100;
@@ -71,6 +88,25 @@ public class BarcodeServiceImpl implements BarcodeService {
         } catch (IOException e) {
             throw new RuntimeException("Error generating barcode image", e);
         }
+    }
+
+    @Override
+    public BarcodeResponseDto getUnitDetailsByBarcode(String barcode) {
+
+        SubProduct subProduct = subProductRepository.findByBarcode(barcode).orElseThrow(() -> new ResourceNotFoundException("No Sub-Product ", "id ", 404L));
+        Product product = productRepository.findById(subProduct.getProduct().getId()).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", 404L));
+        product.setSubProductList(List.of(subProduct));
+        Company company = companyRepository.findById(product.getCompany().getId()).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", 404L));
+        company.setProductList(List.of(product));
+        Unit unit = unitRepository.findById(company.getUnit().getId()).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", 404L));
+
+        BarcodeResponseDto barcodeResponseDto = new BarcodeResponseDto();
+        barcodeResponseDto.setId(unit.getId());
+        barcodeResponseDto.setName(unit.getName());
+        barcodeResponseDto.setDescription(unit.getDescription());
+        barcodeResponseDto.setCompanyList(List.of(company));
+
+        return barcodeResponseDto;
     }
 
 

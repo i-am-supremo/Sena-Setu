@@ -1,5 +1,6 @@
 package com.defense.inventory.controller;
 
+import com.defense.inventory.dto.BarcodeResponseDto;
 import com.defense.inventory.service.BarcodeService;
 import com.google.zxing.WriterException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -37,5 +35,13 @@ public class BarcodeController {
         headers.set("Content-Type", "image/png");
 
         return new ResponseEntity<>(barcodeImage, headers, HttpStatus.OK);
+    }
+    @Operation(
+            summary = "Returns All the Detail Related to Barcode",
+            description = "It will return all the sub-products details based on the barcode"
+    )
+    @GetMapping("/getSubProductByBarcode")
+    public BarcodeResponseDto getUnitDetails(@RequestParam String barcode) {
+        return barcodeService.getUnitDetailsByBarcode(barcode);
     }
 }

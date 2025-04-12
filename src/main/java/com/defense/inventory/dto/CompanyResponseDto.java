@@ -12,5 +12,4 @@ public class CompanyResponseDto {
     private String unitName;
     private String name;
     private String description;
-    private List<Product> productList;
 }
