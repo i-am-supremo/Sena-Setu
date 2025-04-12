@@ -36,6 +36,7 @@ public class BarcodeController {
 
         return new ResponseEntity<>(barcodeImage, headers, HttpStatus.OK);
     }
+
     @Operation(
             summary = "Returns All the Detail Related to Barcode",
             description = "It will return all the sub-products details based on the barcode"

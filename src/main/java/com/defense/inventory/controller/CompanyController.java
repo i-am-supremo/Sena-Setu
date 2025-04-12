@@ -2,7 +2,6 @@ package com.defense.inventory.controller;
 
 import com.defense.inventory.dto.CompanyRequestDto;
 import com.defense.inventory.dto.CompanyResponseDto;
-import com.defense.inventory.dto.ProductResponseDto;
 import com.defense.inventory.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

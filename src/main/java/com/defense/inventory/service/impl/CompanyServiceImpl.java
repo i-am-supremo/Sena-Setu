@@ -54,8 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
         List<Company> companyList = companyRepository.findAll();
         List<CompanyResponseDto> companyResponseDtos = new ArrayList<>();
 
-        for(Company company: companyList)
-        {
+        for (Company company : companyList) {
             CompanyResponseDto companyResponseDto = modelMapper.map(company, CompanyResponseDto.class);
             companyResponseDto.setUnitId(company.getUnit().getId());
             companyResponseDto.setUnitName(company.getUnit().getName());

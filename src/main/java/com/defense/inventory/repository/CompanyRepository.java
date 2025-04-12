@@ -1,7 +1,6 @@
 package com.defense.inventory.repository;
 
 import com.defense.inventory.entity.Company;
-import com.defense.inventory.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
