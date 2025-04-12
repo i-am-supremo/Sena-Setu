@@ -16,4 +16,6 @@ public interface CompanyService {
     CompanyResponseDto updateCompany(Long companyId, CompanyRequestDto updatedCompany, Long unitId);
 
     String deleteCompany(Long companyId);
+
+    List<CompanyResponseDto> getCompanyByUnitId(Long unitId);
 }

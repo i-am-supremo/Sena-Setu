@@ -62,6 +62,16 @@ public class SubProductController {
     }
 
     @Operation(
+            summary = "Return List of Sub-Product based on product id",
+            description = "Return List of Sub-Product based on product id"
+    )
+    @GetMapping("/by-product/{productId}")
+    public ResponseEntity<List<SubProductResponseDto>> getSubProductsByProductId(@PathVariable Long productId) {
+        List<SubProductResponseDto> subProducts = subProductService.getSubProductsByProductId(productId);
+        return ResponseEntity.ok(subProducts);
+    }
+
+    @Operation(
             summary = "Update sub-product details by Id",
             description = "Update sub-product by Id"
     )

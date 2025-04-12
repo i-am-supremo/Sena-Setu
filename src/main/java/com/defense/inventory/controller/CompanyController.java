@@ -2,6 +2,7 @@ package com.defense.inventory.controller;
 
 import com.defense.inventory.dto.CompanyRequestDto;
 import com.defense.inventory.dto.CompanyResponseDto;
+import com.defense.inventory.dto.ProductResponseDto;
 import com.defense.inventory.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -50,6 +51,16 @@ public class CompanyController {
     public ResponseEntity<List<CompanyResponseDto>> getAllCompanies() {
         log.info("Fetching all companies");
         return ResponseEntity.ok(companyService.getAllCompanies());
+    }
+
+    @Operation(
+            summary = "Fetch List of Companies based on unit id",
+            description = "This will return all the companies based on unit id"
+    )
+    @GetMapping("/by-unit/{unitId}")
+    public ResponseEntity<List<CompanyResponseDto>> getCompanyByUnitId(@PathVariable Long unitId) {
+        List<CompanyResponseDto> companies = companyService.getCompanyByUnitId(unitId);
+        return ResponseEntity.ok(companies);
     }
 
     @Operation(

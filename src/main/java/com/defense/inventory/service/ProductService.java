@@ -17,4 +17,6 @@ public interface ProductService {
     ProductResponseDto updateProduct(Long productId, ProductRequestDto updatedProduct, Long companyId);
 
     String deleteProduct(Long productId);
+
+    List<ProductResponseDto> getProductsByCompanyId(Long companyId);
 }

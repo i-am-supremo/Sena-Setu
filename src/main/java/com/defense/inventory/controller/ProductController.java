@@ -2,6 +2,7 @@ package com.defense.inventory.controller;
 
 import com.defense.inventory.dto.ProductRequestDto;
 import com.defense.inventory.dto.ProductResponseDto;
+import com.defense.inventory.dto.SubProductResponseDto;
 import com.defense.inventory.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -59,6 +60,16 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDto>> searchProductByName(@RequestParam("name") String productName) {
         log.info("Searching products with name containing: {}", productName);
         return ResponseEntity.ok(productService.searchProductByName(productName));
+    }
+
+    @Operation(
+            summary = "Fetch List of Products based on company id",
+            description = "This will return all the Products based on company id"
+    )
+    @GetMapping("/by-company/{companyId}")
+    public ResponseEntity<List<ProductResponseDto>> getProductsByCompanyId(@PathVariable Long companyId) {
+        List<ProductResponseDto> products = productService.getProductsByCompanyId(companyId);
+        return ResponseEntity.ok(products);
     }
 
     @Operation(

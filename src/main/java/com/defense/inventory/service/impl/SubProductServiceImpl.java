@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -80,6 +81,14 @@ public class SubProductServiceImpl implements SubProductService {
         subProductRepository.delete(product);
         return "Product Deleted Successfully";
 
+    }
+
+    @Override
+    public List<SubProductResponseDto> getSubProductsByProductId(Long productId) {
+        List<SubProduct> subProducts = subProductRepository.findByProductId(productId);
+        return subProducts.stream()
+                .map(subProduct -> modelMapper.map(subProduct, SubProductResponseDto.class))
+                .collect(Collectors.toList());
     }
 
     private String generateRandomBarcode() {

@@ -18,4 +18,6 @@ public interface SubProductService {
     SubProductResponseDto updateSubProduct(Long subProductId, SubProductRequestDto updatedSubProduct, Long productId);
 
     String deleteSubProduct(Long subProductId);
+
+    List<SubProductResponseDto> getSubProductsByProductId(Long productId);
 }

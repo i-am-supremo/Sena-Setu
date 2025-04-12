@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -71,5 +72,13 @@ public class ProductServiceImpl implements ProductService {
         log.info("Deleting Product {}", product.getName());
         productRepository.delete(product);
         return "Product Deleted Successfully";
+    }
+
+    @Override
+    public List<ProductResponseDto> getProductsByCompanyId(Long companyId) {
+        List<Product> products = productRepository.findByCompanyId(companyId);
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponseDto.class))
+                .collect(Collectors.toList());
     }
 }

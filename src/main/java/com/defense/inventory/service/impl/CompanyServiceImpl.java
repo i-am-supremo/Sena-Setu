@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -86,5 +87,13 @@ public class CompanyServiceImpl implements CompanyService {
         log.info("Deleting Company {}", company.getName());
         companyRepository.delete(company);
         return "Company Deleted Successfully";
+    }
+
+    @Override
+    public List<CompanyResponseDto> getCompanyByUnitId(Long unitId) {
+        List<Company> companyList = companyRepository.findByUnitId(unitId);
+        return companyList.stream()
+                .map(company -> modelMapper.map(company, CompanyResponseDto.class))
+                .collect(Collectors.toList());
     }
 }
