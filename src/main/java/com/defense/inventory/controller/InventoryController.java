@@ -16,25 +16,14 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @Operation(
-            summary = "Increase the inventory of the created sub-product",
-            description = "This will increase the inventory of already created sub-product"
+            summary = "Increase or Decrease the inventory of the created sub-product",
+            description = "This will increase or decrease the inventory of already created sub-product"
     )
     @PostMapping("/increase/{subProductId}")
     public ResponseEntity<String> increaseInventory(@PathVariable Long subProductId, @RequestParam int quantity) {
         log.info("Increasing inventory for SubProduct ID: {} by {}", subProductId, quantity);
         inventoryService.increaseInventory(subProductId, quantity);
         return ResponseEntity.ok("Inventory increased successfully");
-    }
-
-    @Operation(
-            summary = "Decrease the inventory of the created sub-product",
-            description = "This will decrease the inventory of already created sub-product"
-    )
-    @PostMapping("/decrease/{subProductId}")
-    public ResponseEntity<String> decreaseInventory(@PathVariable Long subProductId, @RequestParam int quantity) {
-        log.info("Decreasing inventory for SubProduct ID: {} by {}", subProductId, quantity);
-        inventoryService.decreaseInventory(subProductId, quantity);
-        return ResponseEntity.ok("Inventory decreased successfully");
     }
 
     @Operation(

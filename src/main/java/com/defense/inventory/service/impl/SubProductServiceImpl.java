@@ -37,7 +37,6 @@ public class SubProductServiceImpl implements SubProductService {
             barcode = this.generateRandomBarcode();
         } while (subProductRepository.existsByBarcode(barcode));
         subProduct.setBarcode(barcode);
-        subProduct.setQuantity(0);
         log.info("Saving subProduct ");
         return modelMapper.map(subProductRepository.save(subProduct), SubProductResponseDto.class);
     }
@@ -67,6 +66,7 @@ public class SubProductServiceImpl implements SubProductService {
     public SubProductResponseDto updateSubProduct(Long subProductId, SubProductRequestDto updatedSubProduct, Long productId) {
         SubProduct subProduct = subProductRepository.findById(subProductId).orElseThrow(() -> new ResourceNotFoundException("No Sub Product ", "id ", subProductId));
         subProduct.setName(updatedSubProduct.getName());
+        subProduct.setQuantity(updatedSubProduct.getQuantity());
         if (subProduct.getProduct().getId() != productId) {
             Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
             subProduct.setProduct(product);
