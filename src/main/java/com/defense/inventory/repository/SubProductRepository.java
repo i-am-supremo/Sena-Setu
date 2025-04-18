@@ -17,4 +17,6 @@ public interface SubProductRepository extends JpaRepository<SubProduct, Long> {
     Optional<SubProduct> findByBarcode(String barcode);
 
     List<SubProduct> findByProductId(Long productId);
+
+    List<SubProduct> findByBarcodeContainingIgnoreCase(String barcode);
 }

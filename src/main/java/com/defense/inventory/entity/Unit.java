@@ -18,6 +18,7 @@ public class Unit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(length = 300)
     private String description;
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
     private List<Company> companyList;

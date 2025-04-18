@@ -19,6 +19,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(length = 300)
     private String description;
 
     @ManyToOne
