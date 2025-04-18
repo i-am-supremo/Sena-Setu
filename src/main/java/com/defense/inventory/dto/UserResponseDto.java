@@ -8,6 +8,10 @@ public class UserResponseDto {
 
     private Long id;
     private String name;
+    private String firstName;
+    private String lastName;
+    private String armyNumber;
+    private String company;
     private Role role;
-    private String post;
+    private String rank;
 }

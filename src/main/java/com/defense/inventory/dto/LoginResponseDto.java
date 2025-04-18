@@ -8,11 +8,15 @@ import java.time.LocalDate;
 @Data
 public class LoginResponseDto {
 
-    Long id;
-    String name;
-    Role role;
-    String post;
-    LocalDate joinedOn;
-    String token;
+    private Long id;
+    private String name;
+    private String firstName;
+    private String lastName;
+    private String armyNumber;
+    private String company;
+    private Role role;
+    private String rank;
+    private LocalDate joinedOn;
+    private String token;
 
 }

@@ -26,8 +26,16 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String name;
     @Column(nullable = false)
+    private String firstName;
+    private String lastName;
+    @Column(nullable = false, unique = true)
+    private String armyNumber;
+    @Column(nullable = false)
+    private String company;
+    @Column(nullable = false)
     private String password;
-    private String post;
+    @Column(nullable = false, name = "rank_name")
+    private String rank;
     @Enumerated(EnumType.STRING)
     private Role role;
     private LocalDate joinedOn;

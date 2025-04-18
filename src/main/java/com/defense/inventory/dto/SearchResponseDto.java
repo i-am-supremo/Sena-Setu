@@ -14,4 +14,7 @@ public class SearchResponseDto {
     private String unitName;
     private int quantity;
     private String barcode;
+    private Long unitId;
+    private Long companyId;
+    private Long productId;
 }

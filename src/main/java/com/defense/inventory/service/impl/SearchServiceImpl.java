@@ -72,6 +72,7 @@ public class SearchServiceImpl implements SearchService {
         searchResponseDto.setName(company.getName());
         searchResponseDto.setType(Type.COMPANY);
         searchResponseDto.setUnitName(company.getUnit().getName());
+        searchResponseDto.setUnitId(company.getUnit().getId());
         return searchResponseDto;
     }
 
@@ -81,7 +82,9 @@ public class SearchServiceImpl implements SearchService {
         searchResponseDto.setName(product.getName());
         searchResponseDto.setType(Type.PRODUCT);
         searchResponseDto.setCompanyName(product.getCompany().getName());
+        searchResponseDto.setCompanyId(product.getCompany().getId());
         searchResponseDto.setUnitName(product.getCompany().getUnit().getName());
+        searchResponseDto.setUnitId(product.getCompany().getUnit().getId());
         return searchResponseDto;
     }
 
@@ -93,8 +96,11 @@ public class SearchServiceImpl implements SearchService {
         searchResponseDto.setQuantity(subProduct.getQuantity());
         searchResponseDto.setBarcode(subProduct.getBarcode());
         searchResponseDto.setProductName(subProduct.getProduct().getName());
+        searchResponseDto.setProductId(subProduct.getProduct().getId());
         searchResponseDto.setCompanyName(subProduct.getProduct().getCompany().getName());
+        searchResponseDto.setCompanyId(subProduct.getProduct().getCompany().getId());
         searchResponseDto.setUnitName(subProduct.getProduct().getCompany().getUnit().getName());
+        searchResponseDto.setUnitId(subProduct.getProduct().getCompany().getUnit().getId());
         return searchResponseDto;
     }
 }
