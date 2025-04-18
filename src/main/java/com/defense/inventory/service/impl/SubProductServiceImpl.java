@@ -8,6 +8,7 @@ import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.ProductRepository;
 import com.defense.inventory.repository.SubProductRepository;
 import com.defense.inventory.service.SubProductService;
+import com.defense.inventory.utils.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -25,6 +26,7 @@ public class SubProductServiceImpl implements SubProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
     private final SubProductRepository subProductRepository;
+    private final LoggerServiceImpl loggerService;
 
     @Override
     public SubProductResponseDto createSubProduct(SubProductRequestDto subProductRequestDto, Long productId) {
@@ -38,6 +40,7 @@ public class SubProductServiceImpl implements SubProductService {
         } while (subProductRepository.existsByBarcode(barcode));
         subProduct.setBarcode(barcode);
         log.info("Saving subProduct ");
+        loggerService.saveLoggingDetails(AppConstants.CREATED_SUB_PRODUCT, subProduct.getName());
         return modelMapper.map(subProductRepository.save(subProduct), SubProductResponseDto.class);
     }
 
@@ -71,6 +74,7 @@ public class SubProductServiceImpl implements SubProductService {
             Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
             subProduct.setProduct(product);
         }
+        loggerService.saveLoggingDetails(AppConstants.UPDATED_SUB_PRODUCT, subProduct.getName());
         return modelMapper.map(subProductRepository.save(subProduct), SubProductResponseDto.class);
     }
 
@@ -78,6 +82,7 @@ public class SubProductServiceImpl implements SubProductService {
     public String deleteSubProduct(Long subProductId) {
         SubProduct product = subProductRepository.findById(subProductId).orElseThrow(() -> new ResourceNotFoundException("No Sub Product ", "id ", subProductId));
         log.info("Deleting Product {}", product.getName());
+        loggerService.saveLoggingDetails(AppConstants.DELETED_SUB_PRODUCT, product.getName());
         subProductRepository.delete(product);
         return "Product Deleted Successfully";
 

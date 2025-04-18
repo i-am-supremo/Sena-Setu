@@ -7,6 +7,9 @@ import com.defense.inventory.exception.ResourceAlreadyExistException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.UnitRepository;
 import com.defense.inventory.service.UnitService;
+import com.defense.inventory.utils.AppConstants;
+import com.defense.inventory.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -21,6 +24,7 @@ public class UnitServiceImpl implements UnitService {
 
     private final UnitRepository unitRepository;
     private final ModelMapper modelMapper;
+    private final LoggerServiceImpl loggerService;
 
     @Override
     public UnitResponseDto createUnit(UnitRequestDto unitRequestDto) {
@@ -30,6 +34,8 @@ public class UnitServiceImpl implements UnitService {
         if (alreadyExist != null)
             throw new ResourceAlreadyExistException("Unit already ", "Name ", unit.getName());
         log.info("Saving unit ...");
+        loggerService.saveLoggingDetails(AppConstants.CREATED_UNIT, unit.getName());
+
         return modelMapper.map(unitRepository.save(unit), UnitResponseDto.class);
     }
 
@@ -54,6 +60,7 @@ public class UnitServiceImpl implements UnitService {
         unit.setName(updatedUnit.getName());
         unit.setDescription(updatedUnit.getDescription());
         log.info("Updating unit details of {}", unit.getName());
+        loggerService.saveLoggingDetails(AppConstants.UPDATED_UNIT, unit.getName());
         return modelMapper.map(unitRepository.save(unit), UnitResponseDto.class);
     }
 
@@ -61,6 +68,7 @@ public class UnitServiceImpl implements UnitService {
     public String deleteUnit(Long unitId) {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No unit ", "id ", unitId));
         log.info("Deleting unit {}", unit.getName());
+        loggerService.saveLoggingDetails(AppConstants.DELETED_UNIT, unit.getName());
         unitRepository.delete(unit);
         return "Unit Deleted Successfully";
     }

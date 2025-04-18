@@ -8,6 +8,7 @@ import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.CompanyRepository;
 import com.defense.inventory.repository.UnitRepository;
 import com.defense.inventory.service.CompanyService;
+import com.defense.inventory.utils.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -25,12 +26,14 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final UnitRepository unitRepository;
     private final ModelMapper modelMapper;
+    private final LoggerServiceImpl loggerService;
 
     @Override
     public CompanyResponseDto createCompany(CompanyRequestDto companyRequestDto, Long unitId) {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         Company company = modelMapper.map(companyRequestDto, Company.class);
         company.setUnit(unit);
+        loggerService.saveLoggingDetails(AppConstants.CREATED_COMPANY, company.getName());
         Company savedCompany = companyRepository.save(company);
         CompanyResponseDto companyResponseDto = modelMapper.map(savedCompany, CompanyResponseDto.class);
         companyResponseDto.setUnitId(unit.getId());
@@ -72,6 +75,7 @@ public class CompanyServiceImpl implements CompanyService {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         company.setUnit(unit);
 
+        loggerService.saveLoggingDetails(AppConstants.UPDATED_COMPANY, company.getName());
         Company savedCompany = companyRepository.save(company);
         CompanyResponseDto companyResponseDto = modelMapper.map(savedCompany, CompanyResponseDto.class);
         companyResponseDto.setUnitId(unit.getId());
@@ -84,6 +88,7 @@ public class CompanyServiceImpl implements CompanyService {
     public String deleteCompany(Long companyId) {
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
         log.info("Deleting Company {}", company.getName());
+        loggerService.saveLoggingDetails(AppConstants.DELETED_COMPANY, company.getName());
         companyRepository.delete(company);
         return "Company Deleted Successfully";
     }

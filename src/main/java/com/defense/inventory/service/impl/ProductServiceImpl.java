@@ -8,6 +8,7 @@ import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.CompanyRepository;
 import com.defense.inventory.repository.ProductRepository;
 import com.defense.inventory.service.ProductService;
+import com.defense.inventory.utils.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -24,12 +25,14 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CompanyRepository companyRepository;
     private final ModelMapper modelMapper;
+    private final LoggerServiceImpl loggerService;
 
     @Override
     public ProductResponseDto createProduct(ProductRequestDto productRequestDto, Long companyId) {
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
         Product product = modelMapper.map(productRequestDto, Product.class);
         product.setCompany(company);
+        loggerService.saveLoggingDetails(AppConstants.CREATED_PRODUCT, product.getName());
         return modelMapper.map(productRepository.save(product), ProductResponseDto.class);
     }
 
@@ -63,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
             Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
             product.setCompany(company);
         }
+        loggerService.saveLoggingDetails(AppConstants.UPDATED_PRODUCT, product.getName());
         return modelMapper.map(productRepository.save(product), ProductResponseDto.class);
     }
 
@@ -70,6 +74,7 @@ public class ProductServiceImpl implements ProductService {
     public String deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
         log.info("Deleting Product {}", product.getName());
+        loggerService.saveLoggingDetails(AppConstants.DELETED_PRODUCT, product.getName());
         productRepository.delete(product);
         return "Product Deleted Successfully";
     }
