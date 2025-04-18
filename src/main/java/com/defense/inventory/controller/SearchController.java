@@ -21,9 +21,8 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/{name}")
-    public ResponseEntity<List<SearchResponseDto>> search(@PathVariable String name)
-    {
-        log.info("Searching the DB for {}",name);
+    public ResponseEntity<List<SearchResponseDto>> search(@PathVariable String name) {
+        log.info("Searching the DB for {}", name);
         return ResponseEntity.ok(searchService.search(name));
     }
 
