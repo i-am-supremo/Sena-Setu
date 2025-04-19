@@ -33,6 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyResponseDto createCompany(CompanyRequestDto companyRequestDto, Long unitId) {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         Company company = modelMapper.map(companyRequestDto, Company.class);
+        company.setName(companyRequestDto.getName().trim());
         company.setUnit(unit);
         if (companyRepository.existsByNameAndUnitId(company.getName(), unitId)) {
             throw new ResourceAlreadyExistException(company.getName() + " Already ", "This Unit ", unit.getName());
@@ -73,13 +74,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyResponseDto updateCompany(Long companyId, CompanyRequestDto updatedCompany, Long unitId) {
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
-        company.setName(updatedCompany.getName());
+        company.setName(updatedCompany.getName().trim());
         company.setDescription(updatedCompany.getDescription());
 
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         company.setUnit(unit);
 
-        if (companyRepository.existsByNameAndUnitId(updatedCompany.getName(), unitId)) {
+        if (companyRepository.existsByNameAndUnitId(updatedCompany.getName().trim(), unitId)) {
             throw new ResourceAlreadyExistException(updatedCompany.getName() + " Already ", "This Unit ", unit.getName());
         }
 

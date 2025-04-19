@@ -34,13 +34,14 @@ public class SubProductServiceImpl implements SubProductService {
         log.info("Fetching Product From the repo");
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
         SubProduct subProduct = modelMapper.map(subProductRequestDto, SubProduct.class);
+        subProduct.setName(subProductRequestDto.getName().trim());
         subProduct.setProduct(product);
         String barcode;
         do {
             barcode = this.generateRandomBarcode();
         } while (subProductRepository.existsByBarcode(barcode));
         subProduct.setBarcode(barcode);
-        if (subProductRepository.existsByNameAndProductId(subProductRequestDto.getName(), productId)) {
+        if (subProductRepository.existsByNameAndProductId(subProductRequestDto.getName().trim(), productId)) {
             throw new ResourceAlreadyExistException(subProductRequestDto.getName()+" Already ","This Product ",product.getName());
         }
         log.info("Saving subProduct ");
@@ -72,13 +73,13 @@ public class SubProductServiceImpl implements SubProductService {
     @Override
     public SubProductResponseDto updateSubProduct(Long subProductId, SubProductRequestDto updatedSubProduct, Long productId) {
         SubProduct subProduct = subProductRepository.findById(subProductId).orElseThrow(() -> new ResourceNotFoundException("No Sub Product ", "id ", subProductId));
-        subProduct.setName(updatedSubProduct.getName());
+        subProduct.setName(updatedSubProduct.getName().trim());
         subProduct.setQuantity(updatedSubProduct.getQuantity());
         if (subProduct.getProduct().getId() != productId) {
             Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
             subProduct.setProduct(product);
         }
-        if (subProductRepository.existsByNameAndProductId(updatedSubProduct.getName(), productId)) {
+        if (subProductRepository.existsByNameAndProductId(updatedSubProduct.getName().trim(), productId)) {
             throw new ResourceAlreadyExistException(updatedSubProduct.getName()+" Already ","This Product ",subProduct.getProduct().getName());
         }
         loggerService.saveLoggingDetails(AppConstants.UPDATED_SUB_PRODUCT, subProduct.getName());
