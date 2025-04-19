@@ -12,4 +12,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     List<Company> findByUnitId(Long unitId);
 
     List<Company> findByNameContainingIgnoreCase(String name);
+
+    boolean existsByNameAndUnitId(String name, Long unitId);
 }

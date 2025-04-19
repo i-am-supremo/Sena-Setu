@@ -4,6 +4,7 @@ import com.defense.inventory.dto.ProductRequestDto;
 import com.defense.inventory.dto.ProductResponseDto;
 import com.defense.inventory.entity.Company;
 import com.defense.inventory.entity.Product;
+import com.defense.inventory.exception.ResourceAlreadyExistException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.CompanyRepository;
 import com.defense.inventory.repository.ProductRepository;
@@ -32,6 +33,9 @@ public class ProductServiceImpl implements ProductService {
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
         Product product = modelMapper.map(productRequestDto, Product.class);
         product.setCompany(company);
+        if (productRepository.existsByNameAndCompanyId(product.getName(), companyId)) {
+            throw new ResourceAlreadyExistException(product.getName() + " Already ", "This Company ", company.getName());
+        }
         loggerService.saveLoggingDetails(AppConstants.CREATED_PRODUCT, product.getName());
         return modelMapper.map(productRepository.save(product), ProductResponseDto.class);
     }
@@ -65,6 +69,9 @@ public class ProductServiceImpl implements ProductService {
         if (product.getCompany().getId() != companyId) {
             Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
             product.setCompany(company);
+        }
+        if (productRepository.existsByNameAndCompanyId(updatedProduct.getName(), companyId)) {
+            throw new ResourceAlreadyExistException(updatedProduct.getName() + " Already ", "This Company ", product.getCompany().getName());
         }
         loggerService.saveLoggingDetails(AppConstants.UPDATED_PRODUCT, product.getName());
         return modelMapper.map(productRepository.save(product), ProductResponseDto.class);

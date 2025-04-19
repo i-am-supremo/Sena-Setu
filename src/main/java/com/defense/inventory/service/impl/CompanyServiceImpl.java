@@ -4,6 +4,7 @@ import com.defense.inventory.dto.CompanyRequestDto;
 import com.defense.inventory.dto.CompanyResponseDto;
 import com.defense.inventory.entity.Company;
 import com.defense.inventory.entity.Unit;
+import com.defense.inventory.exception.ResourceAlreadyExistException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.CompanyRepository;
 import com.defense.inventory.repository.UnitRepository;
@@ -33,6 +34,9 @@ public class CompanyServiceImpl implements CompanyService {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         Company company = modelMapper.map(companyRequestDto, Company.class);
         company.setUnit(unit);
+        if (companyRepository.existsByNameAndUnitId(company.getName(), unitId)) {
+            throw new ResourceAlreadyExistException(company.getName() + " Already ", "This Unit ", unit.getName());
+        }
         loggerService.saveLoggingDetails(AppConstants.CREATED_COMPANY, company.getName());
         Company savedCompany = companyRepository.save(company);
         CompanyResponseDto companyResponseDto = modelMapper.map(savedCompany, CompanyResponseDto.class);
@@ -74,6 +78,10 @@ public class CompanyServiceImpl implements CompanyService {
 
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         company.setUnit(unit);
+
+        if (companyRepository.existsByNameAndUnitId(updatedCompany.getName(), unitId)) {
+            throw new ResourceAlreadyExistException(updatedCompany.getName() + " Already ", "This Unit ", unit.getName());
+        }
 
         loggerService.saveLoggingDetails(AppConstants.UPDATED_COMPANY, company.getName());
         Company savedCompany = companyRepository.save(company);
