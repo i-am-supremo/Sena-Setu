@@ -59,6 +59,9 @@ public class UnitServiceImpl implements UnitService {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No unit ", "id ", unitId));
         unit.setName(updatedUnit.getName());
         unit.setDescription(updatedUnit.getDescription());
+        Unit alreadyExist = unitRepository.findByName(updatedUnit.getName());
+        if (alreadyExist != null)
+            throw new ResourceAlreadyExistException("Unit already ", "Name ", unit.getName());
         log.info("Updating unit details of {}", unit.getName());
         loggerService.saveLoggingDetails(AppConstants.UPDATED_UNIT, unit.getName());
         return modelMapper.map(unitRepository.save(unit), UnitResponseDto.class);
