@@ -1,6 +1,7 @@
 package com.defense.inventory.service.impl;
 
 import com.defense.inventory.dto.LoggerResponse;
+import com.defense.inventory.dto.PagedResponseDto;
 import com.defense.inventory.entity.Logger;
 import com.defense.inventory.repository.LoggerRepository;
 import com.defense.inventory.utils.JwtUtils;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,11 +41,21 @@ public class LoggerServiceImpl {
         return jwtUtils.getAllClaimsFromToken(token);
     }
 
-    public List<LoggerResponse> getLoggingDetails(int page) {
+    public PagedResponseDto<LoggerResponse> getLoggingDetails(int page) {
         Pageable pageable = PageRequest.of(page, 50); // 50 records per page
-        return loggerRepository.findAllByOrderByUpdatedAtDesc(pageable)
+        Page<Logger> loggerPage = loggerRepository.findAllByOrderByUpdatedAtDesc(pageable);
+
+        List<LoggerResponse> content = loggerPage.getContent()
                 .stream()
                 .map(logger -> modelMapper.map(logger, LoggerResponse.class))
                 .collect(Collectors.toList());
+
+        return new PagedResponseDto<>(
+                content,
+                loggerPage.getNumber(),
+                loggerPage.getTotalPages(),
+                loggerPage.getTotalElements(),
+                loggerPage.isLast()
+        );
     }
 }

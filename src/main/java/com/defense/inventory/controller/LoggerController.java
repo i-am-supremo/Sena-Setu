@@ -1,6 +1,7 @@
 package com.defense.inventory.controller;
 
 import com.defense.inventory.dto.LoggerResponse;
+import com.defense.inventory.dto.PagedResponseDto;
 import com.defense.inventory.service.impl.LoggerServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,12 @@ public class LoggerController {
     private final LoggerServiceImpl loggerService;
 
     @Operation(
-            summary = "Returns the Logging details of the Project",
+            summary = "Returns the Logging details of the Project ADMIN ACCESS ONLY",
             description = "This will return the logging details of the project"
     )
     @GetMapping("/getLoggingDetails")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<LoggerResponse>> getLoggingDetails(@RequestParam(defaultValue = "0") int page)
+    public ResponseEntity<PagedResponseDto<LoggerResponse>> getLoggingDetails(@RequestParam(defaultValue = "0") int page)
     {
         return ResponseEntity.ok(loggerService.getLoggingDetails(page));
     }

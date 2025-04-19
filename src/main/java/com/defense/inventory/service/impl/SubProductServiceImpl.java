@@ -4,6 +4,7 @@ import com.defense.inventory.dto.SubProductRequestDto;
 import com.defense.inventory.dto.SubProductResponseDto;
 import com.defense.inventory.entity.Product;
 import com.defense.inventory.entity.SubProduct;
+import com.defense.inventory.exception.ResourceAlreadyExistException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.ProductRepository;
 import com.defense.inventory.repository.SubProductRepository;
@@ -39,6 +40,9 @@ public class SubProductServiceImpl implements SubProductService {
             barcode = this.generateRandomBarcode();
         } while (subProductRepository.existsByBarcode(barcode));
         subProduct.setBarcode(barcode);
+        if (subProductRepository.existsByNameAndProductId(subProductRequestDto.getName(), productId)) {
+            throw new ResourceAlreadyExistException(subProductRequestDto.getName()+" Already ","This Product ",product.getName());
+        }
         log.info("Saving subProduct ");
         loggerService.saveLoggingDetails(AppConstants.CREATED_SUB_PRODUCT, subProduct.getName());
         return modelMapper.map(subProductRepository.save(subProduct), SubProductResponseDto.class);
