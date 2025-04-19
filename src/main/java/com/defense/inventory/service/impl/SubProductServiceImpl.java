@@ -78,6 +78,9 @@ public class SubProductServiceImpl implements SubProductService {
             Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
             subProduct.setProduct(product);
         }
+        if (subProductRepository.existsByNameAndProductId(updatedSubProduct.getName(), productId)) {
+            throw new ResourceAlreadyExistException(updatedSubProduct.getName()+" Already ","This Product ",subProduct.getProduct().getName());
+        }
         loggerService.saveLoggingDetails(AppConstants.UPDATED_SUB_PRODUCT, subProduct.getName());
         return modelMapper.map(subProductRepository.save(subProduct), SubProductResponseDto.class);
     }
