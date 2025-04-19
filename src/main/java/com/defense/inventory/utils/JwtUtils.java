@@ -32,7 +32,7 @@ public class JwtUtils {
                 .claim("armyNumber", user.getArmyNumber())
                 .claim("rank", user.getRank())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSecretkey())
                 .compact();
     }
@@ -62,7 +62,7 @@ public class JwtUtils {
         String header = request.getHeader("Authorization");
 
         if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7); // remove "Bearer "
+            return header.substring(7);
         }
         return null;
     }
