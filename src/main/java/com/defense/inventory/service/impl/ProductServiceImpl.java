@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = modelMapper.map(productRequestDto, Product.class);
         product.setName(productRequestDto.getName().trim());
         product.setCompany(company);
-        if (productRepository.existsByNameAndCompanyId(product.getName(), companyId)) {
+        if (productRepository.existsByNameIgnoreCaseAndCompanyId(product.getName(), companyId)) {
             throw new ResourceAlreadyExistException(product.getName() + " Already ", "This Company ", company.getName());
         }
         loggerService.saveLoggingDetails(AppConstants.CREATED_PRODUCT, product.getName());
@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
             Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("No Company ", "id ", companyId));
             product.setCompany(company);
         }
-        if (productRepository.existsByNameAndCompanyId(updatedProduct.getName().trim(), companyId)) {
+        if (productRepository.existsByNameIgnoreCaseAndCompanyId(updatedProduct.getName().trim(), companyId)) {
             throw new ResourceAlreadyExistException(updatedProduct.getName() + " Already ", "This Company ", product.getCompany().getName());
         }
         loggerService.saveLoggingDetails(AppConstants.UPDATED_PRODUCT, product.getName());

@@ -11,4 +11,6 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     Unit findByName(String name);
 
     List<Unit> findByNameContainingIgnoreCase(String name);
+
+    Unit findByNameIgnoreCase(String name);
 }

@@ -41,7 +41,7 @@ public class SubProductServiceImpl implements SubProductService {
             barcode = this.generateRandomBarcode();
         } while (subProductRepository.existsByBarcode(barcode));
         subProduct.setBarcode(barcode);
-        if (subProductRepository.existsByNameAndProductId(subProductRequestDto.getName().trim(), productId)) {
+        if (subProductRepository.existsByNameIgnoreCaseAndProductId(subProductRequestDto.getName().trim(), productId)) {
             throw new ResourceAlreadyExistException(subProductRequestDto.getName()+" Already ","This Product ",product.getName());
         }
         log.info("Saving subProduct ");
@@ -79,7 +79,7 @@ public class SubProductServiceImpl implements SubProductService {
             Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No Product ", "id ", productId));
             subProduct.setProduct(product);
         }
-        if (subProductRepository.existsByNameAndProductId(updatedSubProduct.getName().trim(), productId)) {
+        if (subProductRepository.existsByNameIgnoreCaseAndProductId(updatedSubProduct.getName().trim(), productId)) {
             throw new ResourceAlreadyExistException(updatedSubProduct.getName()+" Already ","This Product ",subProduct.getProduct().getName());
         }
         loggerService.saveLoggingDetails(AppConstants.UPDATED_SUB_PRODUCT, subProduct.getName());

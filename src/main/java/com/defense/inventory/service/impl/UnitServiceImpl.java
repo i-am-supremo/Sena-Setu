@@ -29,7 +29,7 @@ public class UnitServiceImpl implements UnitService {
         log.info("Registering New Unit...");
         Unit unit = modelMapper.map(unitRequestDto, Unit.class);
         unit.setName(unitRequestDto.getName().trim());
-        Unit alreadyExist = unitRepository.findByName(unit.getName());
+        Unit alreadyExist = unitRepository.findByNameIgnoreCase(unit.getName());
         if (alreadyExist != null)
             throw new ResourceAlreadyExistException("Unit already ", "Name ", unit.getName());
         log.info("Saving unit ...");
@@ -58,7 +58,7 @@ public class UnitServiceImpl implements UnitService {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No unit ", "id ", unitId));
         unit.setName(updatedUnit.getName().trim());
         unit.setDescription(updatedUnit.getDescription());
-        Unit alreadyExist = unitRepository.findByName(updatedUnit.getName().trim());
+        Unit alreadyExist = unitRepository.findByNameIgnoreCase(updatedUnit.getName().trim());
         if (alreadyExist != null)
             throw new ResourceAlreadyExistException("Unit already ", "Name ", unit.getName());
         log.info("Updating unit details of {}", unit.getName());
