@@ -16,13 +16,13 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @Operation(
-            summary = "Increase or Decrease the inventory of the created sub-product",
-            description = "This will increase or decrease the inventory of already created sub-product"
+            summary = "Updates the inventory of the created sub-product",
+            description = "Updates the inventory of already created sub-product"
     )
     @PostMapping("/increase/{subProductId}")
-    public ResponseEntity<String> increaseInventory(@PathVariable Long subProductId, @RequestParam int quantity) {
+    public ResponseEntity<String> updateInventory(@PathVariable Long subProductId, @RequestParam int quantity) {
         log.info("Increasing inventory for SubProduct ID: {} by {}", subProductId, quantity);
-        inventoryService.increaseInventory(subProductId, quantity);
+        inventoryService.updateInventory(subProductId, quantity);
         return ResponseEntity.ok("Inventory increased successfully");
     }
 

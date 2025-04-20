@@ -16,10 +16,9 @@ public class InventoryServiceImpl implements InventoryService {
     private final SubProductRepository subProductRepository;
 
     @Override
-    public void increaseInventory(Long subProductId, int quantity) {
+    public void updateInventory(Long subProductId, int quantity) {
         SubProduct subProduct = subProductRepository.findById(subProductId).orElseThrow(() -> new ResourceNotFoundException("No Sub Product ", "id ", subProductId));
-        int updatedQuantity = subProduct.getQuantity() + quantity;
-        subProduct.setQuantity(updatedQuantity);
+        subProduct.setQuantity(quantity);
         subProductRepository.save(subProduct);
 
     }
