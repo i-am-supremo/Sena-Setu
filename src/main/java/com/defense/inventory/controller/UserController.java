@@ -74,4 +74,14 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
+    @Operation(
+            summary = "Changes the Password for existing user",
+            description = "This api changes the password of existing user"
+    )
+    @PostMapping("/changePassword/{userId}")
+    public ResponseEntity<String> changePassword(@PathVariable Long userId, @RequestParam String currentPassword, @RequestParam String newPassword) {
+        log.info("Received request to change password for user with id: {}", userId);
+        return ResponseEntity.ok(userService.changePassword(userId, currentPassword, newPassword));
+    }
+
 }

@@ -18,4 +18,6 @@ public interface UserService {
     UserResponseDto updateUser(Long userId, UserRequestDto updatedUser);
 
     String deleteUser(Long userId);
+
+    String changePassword(Long userId, String currentPassword, String newPassword);
 }

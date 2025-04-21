@@ -4,6 +4,7 @@ import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.entity.User;
 import com.defense.inventory.entity.enums.Role;
+import com.defense.inventory.exception.InvalidCredentialsException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.UserRepository;
 import com.defense.inventory.service.UserService;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDto createAdminUser(String name) {
@@ -68,6 +71,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Deleting user {}", user.getName());
         userRepository.delete(user);
         return "User Deleted Successfully";
+    }
+
+    @Override
+    public String changePassword(Long userId, String currentPassword, String newPassword) {
+        if (currentPassword.equals(newPassword)) {
+            throw new InvalidCredentialsException("Password Change: Current password and New password cannot be same");
+        }
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user ", "id ", userId));
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new InvalidCredentialsException("Old Password");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return "Password Updated SuccessFully";
     }
 
     @Override
