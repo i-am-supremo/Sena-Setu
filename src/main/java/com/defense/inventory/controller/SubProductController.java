@@ -2,6 +2,7 @@ package com.defense.inventory.controller;
 
 import com.defense.inventory.dto.SubProductRequestDto;
 import com.defense.inventory.dto.SubProductResponseDto;
+import com.defense.inventory.service.InventoryService;
 import com.defense.inventory.service.SubProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SubProductController {
 
     private final SubProductService subProductService;
+    private final InventoryService inventoryService;
 
     @Operation(
             summary = "Creates a new Sub-Product in the DB",
@@ -78,8 +80,12 @@ public class SubProductController {
     @PutMapping("/{id}/product/{productId}")
     public ResponseEntity<SubProductResponseDto> updateSubProduct(@PathVariable("id") Long subProductId,
                                                                   @Valid @RequestBody SubProductRequestDto updatedSubProduct,
-                                                                  @PathVariable("productId") Long productId) {
+                                                                  @PathVariable("productId") Long productId, @RequestParam Boolean isQuantityUpdate) {
         log.info("Updating sub-product with ID: {}", subProductId);
+        if(isQuantityUpdate)
+        {
+           return ResponseEntity.ok(inventoryService.updateInventory(subProductId,updatedSubProduct.getQuantity()));
+        }
         return ResponseEntity.ok(subProductService.updateSubProduct(subProductId, updatedSubProduct, productId));
     }
 
