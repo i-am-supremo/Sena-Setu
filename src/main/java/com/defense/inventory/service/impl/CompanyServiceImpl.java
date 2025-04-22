@@ -35,7 +35,9 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = modelMapper.map(companyRequestDto, Company.class);
         company.setName(companyRequestDto.getName().trim());
         company.setUnit(unit);
-        if (companyRepository.existsByNameIgnoreCaseAndUnitId(company.getName(), unitId)) {
+        
+        Company alreadyExist = companyRepository.existsByNameIgnoreCaseAndUnitId(company.getName(), unitId);
+        if (alreadyExist!=null) {
             throw new ResourceAlreadyExistException(company.getName() + " Already ", "This Unit ", unit.getName());
         }
         loggerService.saveLoggingDetails(AppConstants.CREATED_COMPANY, company.getName());
@@ -80,7 +82,8 @@ public class CompanyServiceImpl implements CompanyService {
         Unit unit = unitRepository.findById(unitId).orElseThrow(() -> new ResourceNotFoundException("No Unit ", "id ", unitId));
         company.setUnit(unit);
 
-        if (companyRepository.existsByNameIgnoreCaseAndUnitId(updatedCompany.getName().trim(), unitId)) {
+        Company alreadyExist = companyRepository.existsByNameIgnoreCaseAndUnitId(company.getName(), unitId);
+        if (alreadyExist!=null && alreadyExist.getId() != companyId) {
             throw new ResourceAlreadyExistException(updatedCompany.getName() + " Already ", "This Unit ", unit.getName());
         }
 

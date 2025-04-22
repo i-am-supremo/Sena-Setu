@@ -59,7 +59,7 @@ public class UnitServiceImpl implements UnitService {
         unit.setName(updatedUnit.getName().trim());
         unit.setDescription(updatedUnit.getDescription());
         Unit alreadyExist = unitRepository.findByNameIgnoreCase(updatedUnit.getName().trim());
-        if (alreadyExist != null)
+        if (alreadyExist != null && unitId != alreadyExist.getId())
             throw new ResourceAlreadyExistException("Unit already ", "Name ", unit.getName());
         log.info("Updating unit details of {}", unit.getName());
         loggerService.saveLoggingDetails(AppConstants.UPDATED_UNIT, unit.getName());
