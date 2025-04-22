@@ -15,6 +15,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     List<Company> findByNameContainingIgnoreCase(String name);
 
-    @Query("SELECT COUNT(c) > 0 FROM Company c WHERE LOWER(c.name) = LOWER(:name) AND c.unit.id = :unitId")
-    Company existsByNameIgnoreCaseAndUnitId(@Param("name") String name, @Param("unitId") Long unitId);
+    @Query("SELECT c FROM Company c WHERE LOWER(c.name) = LOWER(:name) AND c.unit.id = :unitId")
+    Company findByNameIgnoreCaseAndUnitId(@Param("name") String name, @Param("unitId") Long unitId);
 }

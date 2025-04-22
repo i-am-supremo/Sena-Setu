@@ -15,6 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCompanyId(Long companyId);
 
-    @Query("SELECT COUNT(p) > 0 FROM Product p WHERE LOWER(p.name) = LOWER(:name) AND p.company.id = :companyId")
-    Product existsByNameIgnoreCaseAndCompanyId(@Param("name") String name, @Param("companyId") Long companyId);
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) = LOWER(:name) AND p.company.id = :companyId")
+    Product findByNameIgnoreCaseAndCompanyId(@Param("name") String name, @Param("companyId") Long companyId);
 }
