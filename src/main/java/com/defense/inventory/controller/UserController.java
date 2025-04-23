@@ -1,7 +1,6 @@
 package com.defense.inventory.controller;
 
 import com.defense.inventory.dto.UpdateUserRequestDto;
-import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.service.AccountService;
 import com.defense.inventory.service.UserService;
@@ -13,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -79,10 +80,14 @@ public class UserController {
 
     @Operation(summary = "Change user password", description = "Allows user to change their password")
     @PutMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestParam Long userId,
-                                                 @RequestParam String oldPassword,
-                                                 @RequestParam String newPassword) {
-        return ResponseEntity.ok(accountService.changePassword(userId, oldPassword, newPassword));
+    public ResponseEntity<Map<String, String>> changePassword(@RequestParam Long userId,
+                                                              @RequestParam String oldPassword,
+                                                              @RequestParam String newPassword) {
+        String responseMessage = accountService.changePassword(userId, oldPassword, newPassword);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", responseMessage);
+
+        return ResponseEntity.ok(response);
     }
 
 }
