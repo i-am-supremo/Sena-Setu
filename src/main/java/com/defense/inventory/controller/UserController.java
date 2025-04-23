@@ -1,5 +1,6 @@
 package com.defense.inventory.controller;
 
+import com.defense.inventory.dto.UpdateUserRequestDto;
 import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.service.UserService;
@@ -58,7 +59,7 @@ public class UserController {
             description = "Updates user details"
     )
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDto userRequestDto) {
         log.info("Received request to update user with id: {}", id);
         return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
     }

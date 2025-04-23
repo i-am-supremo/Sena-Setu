@@ -1,5 +1,6 @@
 package com.defense.inventory.service.impl;
 
+import com.defense.inventory.dto.UpdateUserRequestDto;
 import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.entity.User;
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public UserResponseDto updateUser(Long userId, UserRequestDto updatedUser) {
+    public UserResponseDto updateUser(Long userId, UpdateUserRequestDto updatedUser) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user ", "id ", userId));
         User alreadyExist =  userRepository.findByNameIgnoreCase(updatedUser.getName());
         if (alreadyExist!=null && alreadyExist.getId() != userId)

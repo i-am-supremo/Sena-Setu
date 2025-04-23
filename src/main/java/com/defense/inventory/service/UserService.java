@@ -1,5 +1,6 @@
 package com.defense.inventory.service;
 
+import com.defense.inventory.dto.UpdateUserRequestDto;
 import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public interface UserService {
 
     List<UserResponseDto> getAllUsers();
 
-    UserResponseDto updateUser(Long userId, UserRequestDto updatedUser);
+    UserResponseDto updateUser(Long userId, UpdateUserRequestDto updatedUser);
 
     String deleteUser(Long userId);
 }
