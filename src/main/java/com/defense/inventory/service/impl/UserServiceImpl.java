@@ -4,6 +4,7 @@ import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
 import com.defense.inventory.entity.User;
 import com.defense.inventory.entity.enums.Role;
+import com.defense.inventory.exception.ResourceAlreadyExistException;
 import com.defense.inventory.exception.ResourceNotFoundException;
 import com.defense.inventory.repository.UserRepository;
 import com.defense.inventory.service.UserService;
@@ -55,8 +56,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserResponseDto updateUser(Long userId, UserRequestDto updatedUser) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user ", "id ", userId));
+        User alreadyExist =  userRepository.findByNameIgnoreCase(updatedUser.getName());
+        if (alreadyExist!=null && alreadyExist.getId() != userId)
+            throw new ResourceAlreadyExistException("User already ", "UserName ", user.getName());
+
         user.setName(updatedUser.getName());
-        user.setPassword(updatedUser.getPassword());
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setCompany(updatedUser.getCompany());
+        user.setRank(updatedUser.getRank());
         log.info("Updating user details of {}", user.getName());
         return modelMapper.map(userRepository.save(user), UserResponseDto.class);
     }
