@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserResponseDto createAdminUser(String name) {
-        User user = userRepository.findByName(name);
+        User user = userRepository.findByNameIgnoreCase(name);
         if (user == null)
             throw new ResourceNotFoundException("No user ", "Name " + name + " ", 404L);
         user.setRole(Role.ADMIN);
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username);
+        User user = userRepository.findByNameIgnoreCase(username);
         if (user == null)
             throw new ResourceNotFoundException("No User ", "Name", 404L);
         return user;

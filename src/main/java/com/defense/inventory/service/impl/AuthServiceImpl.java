@@ -37,9 +37,14 @@ public class AuthServiceImpl {
     private JwtUtils jwtService;
 
     public UserResponseDto signup(UserRequestDto signupDto) {
-        User user = userRepo.findByName(signupDto.getName());
+        User user = userRepo.findByNameIgnoreCase(signupDto.getName());
         if (user != null)
             throw new ResourceAlreadyExistException("User already ", "Name ", user.getName());
+        User userCheck = userRepo.findByArmyNumber(signupDto.getArmyNumber());
+        if (userCheck!=null)
+        {
+            throw new ResourceAlreadyExistException("User Already ", "Army Number ", userCheck.getArmyNumber());
+        }
 
         User userToBeSaved = modelMapper.map(signupDto, User.class);
         userToBeSaved.setJoinedOn(LocalDate.now());
@@ -49,7 +54,7 @@ public class AuthServiceImpl {
     }
 
     public LoginResponseDto login(LoginDto loginDto) {
-        User userCheck = userRepo.findByName(loginDto.getName());
+        User userCheck = userRepo.findByNameIgnoreCase(loginDto.getName());
         if (userCheck == null)
             throw new ResourceNotFoundException("No User", "this Name " + loginDto.getName(), 404L);
 
