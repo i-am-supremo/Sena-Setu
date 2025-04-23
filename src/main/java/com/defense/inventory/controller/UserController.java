@@ -3,6 +3,7 @@ package com.defense.inventory.controller;
 import com.defense.inventory.dto.UpdateUserRequestDto;
 import com.defense.inventory.dto.UserRequestDto;
 import com.defense.inventory.dto.UserResponseDto;
+import com.defense.inventory.service.AccountService;
 import com.defense.inventory.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AccountService accountService;
 
     @Operation(
             summary = "Update User to Admin, ADMIN Access Only",
@@ -73,6 +75,14 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         log.info("Received request to delete user with id: {}", id);
         return ResponseEntity.ok(userService.deleteUser(id));
+    }
+
+    @Operation(summary = "Change user password", description = "Allows user to change their password")
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestParam Long userId,
+                                                 @RequestParam String oldPassword,
+                                                 @RequestParam String newPassword) {
+        return ResponseEntity.ok(accountService.changePassword(userId, oldPassword, newPassword));
     }
 
 }
